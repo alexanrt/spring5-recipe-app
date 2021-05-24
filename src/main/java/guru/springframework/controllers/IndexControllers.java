@@ -4,11 +4,13 @@ import guru.springframework.domain.Category;
 import guru.springframework.domain.UnitOfMeasure;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
+@Slf4j
 @Controller
 public class IndexControllers {
 
@@ -22,7 +24,7 @@ public class IndexControllers {
 
     @RequestMapping({"","/","/index"})
     public String getIndexPage(){
-
+        log.debug("Index page is called");
         Optional<Category> categoryOptional = categoryRepository.findByDescription("American");
         Optional<UnitOfMeasure> unitOfMeasureOptional = unitOfMeasureRepository.findByDescription("Teaspoon");
 
