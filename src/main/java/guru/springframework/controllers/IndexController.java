@@ -12,12 +12,12 @@ import java.util.Optional;
 
 @Slf4j
 @Controller
-public class IndexControllers {
+public class IndexController {
 
     private CategoryRepository categoryRepository;
     private UnitOfMeasureRepository unitOfMeasureRepository;
 
-    public IndexControllers(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+    public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.categoryRepository = categoryRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
