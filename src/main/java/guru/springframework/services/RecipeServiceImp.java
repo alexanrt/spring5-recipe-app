@@ -1,9 +1,13 @@
 package guru.springframework.services;
 
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.converters.RecipeCommandToRecipe;
+import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,9 +17,13 @@ import java.util.Set;
 @Service
 public class RecipeServiceImp implements RecipeService {
     private final RecipeRepository recipeRepository;
+    private final RecipeCommandToRecipe recipeCommandToRecipe;
+    private final RecipeToRecipeCommand recipeToRecipeCommand;
 
-    public RecipeServiceImp(RecipeRepository recipeRepository) {
+    public RecipeServiceImp(RecipeRepository recipeRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
         this.recipeRepository = recipeRepository;
+        this.recipeCommandToRecipe = recipeCommandToRecipe;
+        this.recipeToRecipeCommand = recipeToRecipeCommand;
     }
 
     @Override
@@ -33,5 +41,14 @@ public class RecipeServiceImp implements RecipeService {
             throw new RuntimeException("Recipe Not Found!!");
         }
         return optionalRecipe.get();
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+        Recipe convertedRecipe = recipeCommandToRecipe.convert(command);
+        Recipe savecRecipe = recipeRepository.save(convertedRecipe);
+        log.debug("Saved Recipe: " + savecRecipe.getId());
+        return recipeToRecipeCommand.convert(savecRecipe);
     }
 }
